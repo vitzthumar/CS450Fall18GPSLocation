@@ -41,6 +41,8 @@ public class MainActivity
             this.handler.addObserver(this);
         }
 
+        // TODO add a home button
+
 
         // check permissions
         if (checkSelfPermission(
