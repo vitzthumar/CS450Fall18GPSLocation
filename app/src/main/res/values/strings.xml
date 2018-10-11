@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">LocationGPS</string>
+    <string name="total_distance">TOTAL DISTANCE: </string>
+    <string name="average_velocity">AVERAGE VELOCITY: </string>
+    <string name="total_time">TOTAL TIME: </string>
+    <string name="start">START</string>
+    <!-- TODO get rid of this test string and replace it with dynamically-collected data -->
+    <string name="test_string">1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25</string>
+    <string name="elapsed_time">ELAPSED TIME: </string>
+    <string name="aboutButton">ABOUT THIS APP</string>
+    <string name="about_title_text">About this GPS Tracker</string>
+    <string name="about">
+        Press START to begin recording your
+        location and STOP to stop recording.\n\n
+
+        Values found in the list indicate the
+        distance you traveled between
+        each START and STOP.\n\n
+
+        Developed by August Vitzthum and Nevaan Perera
+    </string>
+    <string name="close">CLOSE</string>
 </resources>

@@ -4,22 +4,24 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.support.v4.app.Fragment;
 
 import java.util.Observable;
 import java.util.Observer;
 
-public class MainActivity
-        extends AppCompatActivity
-        implements Observer {
+import edu.stlawu.locationgps.MainFragment.OnFragmentInteractionListener;
 
-    private TextView tv_lat;
-    private TextView tv_lon;
+public class MainActivity extends AppCompatActivity implements Observer, OnFragmentInteractionListener {
+
+    //private TextView tv_lat;
+    //private TextView tv_lon;
 
     private Observable location;
     private LocationHandler handler = null;
@@ -33,8 +35,9 @@ public class MainActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.tv_lat = findViewById(R.id.tv_lat);
-        this.tv_lon = findViewById(R.id.tv_lon);
+        // TODO get rid of these as they won't populate our xml
+        //this.tv_lat = findViewById(R.id.tv_lat);
+        //this.tv_lon = findViewById(R.id.tv_lon);
 
         if (handler == null) {
             this.handler = new LocationHandler(this);
@@ -69,11 +72,11 @@ public class MainActivity
             // we have only asked for FINE LOCATION
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 this.permissions_granted = true;
-                Log.i(LOGTAG, "Fine location permisssion granted.");
+                Log.i(LOGTAG, "Fine location permission granted.");
             }
             else {
                 this.permissions_granted = false;
-                Log.i(LOGTAG, "Fine location permisssion not granted.");
+                Log.i(LOGTAG, "Fine location permission denied.");
             }
         }
 
@@ -90,10 +93,17 @@ public class MainActivity
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    tv_lat.setText(Double.toString(lat));
-                    tv_lon.setText(Double.toString(lon));
+                    // TODO get rid of these as well
+                    //tv_lat.setText(Double.toString(lat));
+                    //tv_lon.setText(Double.toString(lon));
                 }
             });
         }
+    }
+
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
