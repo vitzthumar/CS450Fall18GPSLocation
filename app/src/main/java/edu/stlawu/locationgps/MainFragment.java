@@ -89,6 +89,15 @@ public class MainFragment extends Fragment implements Observer {
             }
         });
 
+        // StartStop
+        View startStopButton = rootView.findViewById(R.id.startStopButton);
+        startStopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handler.getLocation();
+            }
+        });
+
 
         return rootView;
     }

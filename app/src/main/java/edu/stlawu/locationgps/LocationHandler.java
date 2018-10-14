@@ -26,7 +26,30 @@ public class LocationHandler
         this.act = act;
         this.lm = (LocationManager) this.act.getSystemService(
                 Context.LOCATION_SERVICE);
+    }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        //setChanged();
+        // notifyObservers(location);
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
+    }
+
+    protected void getLocation() {
         if (this.act.checkSelfPermission(
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -48,7 +71,7 @@ public class LocationHandler
 
             // check for initial GPS coordinate
             Location l =
-                lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
             if (l != null) {
                 setChanged();
@@ -70,28 +93,6 @@ public class LocationHandler
                 notifyObservers(l);
                 return;
             }
-
         }
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        setChanged();
-        notifyObservers(location);
-    }
-
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-
     }
 }
