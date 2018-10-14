@@ -1,6 +1,7 @@
 package edu.stlawu.locationgps;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
@@ -19,9 +20,9 @@ public class LocationHandler
 
     // handles location services for the device
     private LocationManager lm;
-    private MainActivity act;
+    private Activity act;
 
-    public LocationHandler(MainActivity act) {
+    public LocationHandler(Activity act) {
         this.act = act;
         this.lm = (LocationManager) this.act.getSystemService(
                 Context.LOCATION_SERVICE);

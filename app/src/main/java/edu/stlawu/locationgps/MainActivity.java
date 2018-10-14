@@ -18,13 +18,12 @@ import java.util.Observer;
 
 import edu.stlawu.locationgps.MainFragment.OnFragmentInteractionListener;
 
-public class MainActivity extends AppCompatActivity implements Observer, OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
     //private TextView tv_lat;
     //private TextView tv_lon;
 
     private Observable location;
-    private LocationHandler handler = null;
     private final static int PERMISSION_REQUEST_CODE = 999;
 
     private boolean permissions_granted;
@@ -39,21 +38,6 @@ public class MainActivity extends AppCompatActivity implements Observer, OnFragm
         //this.tv_lat = findViewById(R.id.tv_lat);
         //this.tv_lon = findViewById(R.id.tv_lon);
 
-        if (handler == null) {
-            this.handler = new LocationHandler(this);
-            this.handler.addObserver(this);
-        }
-
-        // check permissions
-        if (checkSelfPermission(
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
-                    PERMISSION_REQUEST_CODE
-            );
-        }
     }
 
     public boolean isPermissions_granted() {
@@ -81,26 +65,6 @@ public class MainActivity extends AppCompatActivity implements Observer, OnFragm
         }
 
     }
-
-    @Override
-    public void update(Observable observable,
-                       Object o) {
-        if (observable instanceof LocationHandler) {
-            Location l = (Location) o;
-            final double lat = l.getLatitude();
-            final double lon = l.getLongitude();
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    // TODO get rid of these as well
-                    //tv_lat.setText(Double.toString(lat));
-                    //tv_lon.setText(Double.toString(lon));
-                }
-            });
-        }
-    }
-
 
     @Override
     public void onFragmentInteraction(Uri uri) {
