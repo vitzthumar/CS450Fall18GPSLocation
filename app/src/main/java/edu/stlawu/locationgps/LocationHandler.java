@@ -58,16 +58,16 @@ public class LocationHandler
                     5000,
                     0,
                     this);
-            lm.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER,
-                    5000,
-                    0,
-                    this);
-            lm.requestLocationUpdates(
-                    LocationManager.PASSIVE_PROVIDER,
-                    5000,
-                    0,
-                    this);
+//            lm.requestLocationUpdates(
+//                    LocationManager.NETWORK_PROVIDER,
+//                    5000,
+//                    0,
+//                    this);
+//            lm.requestLocationUpdates(
+//                    LocationManager.PASSIVE_PROVIDER,
+//                    5000,
+//                    0,
+//                    this);
 
             // check for initial GPS coordinate
             Location l =
@@ -79,20 +79,20 @@ public class LocationHandler
                 return;
             }
 
-            l = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            if (l != null) {
-                setChanged();
-                notifyObservers(l);
-                return;
-            }
-
-            l = lm.getLastKnownLocation(
-                    LocationManager.PASSIVE_PROVIDER);
-            if (l != null) {
-                setChanged();
-                notifyObservers(l);
-                return;
-            }
+//            l = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+//            if (l != null) {
+//                setChanged();
+//                notifyObservers(l);
+//                return;
+//            }
+//
+//            l = lm.getLastKnownLocation(
+//                    LocationManager.PASSIVE_PROVIDER);
+//            if (l != null) {
+//                setChanged();
+//                notifyObservers(l);
+//                return;
+//            }
         }
     }
 }

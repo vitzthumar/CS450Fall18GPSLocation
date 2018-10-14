@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.Observable;
@@ -27,6 +29,13 @@ public class MainFragment extends Fragment implements Observer {
     private TextView scrollableText = null;
     private LocationHandler handler = null;
     private final static int PERMISSION_REQUEST_CODE = 999;
+    private Button startStopButton;
+    private static final int EARTH_RADIUS = 6371;
+    private int buttonState; // 0 means the button says "start", 1 means it says "stop"
+    private double startLatitude;
+    private double startLongitude;
+    private double stopLatitude;
+    private double stopLongitude;
 
     public MainFragment() {
         // required empty public constructor
@@ -53,6 +62,13 @@ public class MainFragment extends Fragment implements Observer {
                     PERMISSION_REQUEST_CODE
             );
         }
+
+        // set the instance variables
+        buttonState = 0;
+        startLatitude = 0;
+        startLongitude = 0;
+        stopLatitude = 0;
+        stopLongitude = 0;
     }
 
     @Override
@@ -67,7 +83,7 @@ public class MainFragment extends Fragment implements Observer {
         this.scrollableText = rootView.findViewById(R.id.scrollableText);
         scrollableText.setMovementMethod(new ScrollingMovementMethod());
 
-        //
+
         View aboutButton = rootView.findViewById(R.id.about_button);
         aboutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,11 +106,24 @@ public class MainFragment extends Fragment implements Observer {
         });
 
         // StartStop
-        View startStopButton = rootView.findViewById(R.id.startStopButton);
+        startStopButton = rootView.findViewById(R.id.startStopButton);
         startStopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handler.getLocation();
+                // Check the state of the button
+                if (buttonState == 0) {
+                    // button says start - so we start and rememeber the location of the individual
+                    handler.getLocation();
+                    buttonState = 1;
+                    startStopButton.setBackgroundColor(Color.RED);
+                    startStopButton.setText("Stop");
+                } else {
+                    // button says stop - so we stop and do the appropriate calculations
+                    handler.getLocation();
+                    buttonState = 0;
+                    startStopButton.setBackgroundColor(Color.GREEN);
+                    startStopButton.setText("Start");
+                }
             }
         });
 
@@ -136,11 +165,17 @@ public class MainFragment extends Fragment implements Observer {
             final double lat = l.getLatitude();
             final double lon = l.getLongitude();
 
-            System.out.println(lat);
-            System.out.println(lon);
+            // Check which state the button is in
+            if (buttonState == 0) {
+                startLatitude = lat;
+                startLongitude = lon;
+            } else {
+                stopLatitude = lat;
+                stopLongitude = lon;
+                Haversine.distance(startLatitude, startLongitude, stopLatitude, stopLongitude);
+            }
         }
     }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
