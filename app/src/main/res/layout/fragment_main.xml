@@ -75,7 +75,6 @@
         android:layout_margin="20dp"
         android:padding="5dp"
         android:background="@drawable/border"
-        android:text="@string/test_string"
         android:scrollbars="vertical"
         android:maxHeight="250dp"
         android:minHeight="250dp"

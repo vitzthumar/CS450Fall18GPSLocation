@@ -172,7 +172,8 @@ public class MainFragment extends Fragment implements Observer {
             } else {
                 stopLatitude = lat;
                 stopLongitude = lon;
-                Haversine.distance(startLatitude, startLongitude, stopLatitude, stopLongitude);
+                double dist = Haversine.distance(startLatitude, startLongitude, stopLatitude, stopLongitude);
+                scrollableText.append("Distance Travelled: " + dist + " KM\n");
             }
         }
     }

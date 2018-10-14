@@ -1,8 +1,6 @@
 package edu.stlawu.locationgps;
 
 public class Haversine {
-    // Citation: https://github.com/jasonwinn/haversine/blob/master/Haversine.java
-
     private static final int EARTH_RADIUS = 6371; // Approx Earth radius in KM
 
     public static double distance(double startLat, double startLong, double endLat, double endLong) {
