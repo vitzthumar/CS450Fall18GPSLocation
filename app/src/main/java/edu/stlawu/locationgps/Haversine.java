@@ -5,6 +5,7 @@ public class Haversine {
 
     public static double distance(double startLat, double startLong, double endLat, double endLong) {
 
+        // TODO remove these printlns
         System.out.println("Canlulating...");
         System.out.println("startLat " + startLat);
         System.out.println("startLon " + startLong);
@@ -20,7 +21,7 @@ public class Haversine {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         System.out.println("Distance Travlled: " + EARTH_RADIUS * c + " [KM]");
-        return EARTH_RADIUS * c; // <-- d
+        return EARTH_RADIUS * c; // <-- dist (in KILOMETERS)
     }
 
     public static double haversin(double val) {
