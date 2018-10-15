@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -36,6 +37,7 @@ public class MainFragment extends Fragment implements Observer {
     private double startLongitude;
     private double stopLatitude;
     private double stopLongitude;
+    private Date startDate;
 
     public MainFragment() {
         // required empty public constructor
@@ -169,10 +171,15 @@ public class MainFragment extends Fragment implements Observer {
             if (buttonState == 0) {
                 startLatitude = lat;
                 startLongitude = lon;
+                startDate = new Date();
             } else {
                 stopLatitude = lat;
                 stopLongitude = lon;
+                long[] timeDifferences = Time.calculateTimeDifference(startDate, new Date());
                 double dist = Haversine.distance(startLatitude, startLongitude, stopLatitude, stopLongitude);
+                System.out.println("Difference in Seconds: " + timeDifferences[0]);
+                System.out.println("Difference in Minutes: " + timeDifferences[1]);
+                System.out.println("Difference in Hours: " + timeDifferences[2]);
                 scrollableText.append("Distance Travelled: " + dist + " KM\n");
             }
         }
