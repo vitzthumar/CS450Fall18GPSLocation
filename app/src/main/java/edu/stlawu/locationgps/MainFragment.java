@@ -181,6 +181,16 @@ public class MainFragment extends Fragment implements Observer {
                 System.out.println("Difference in Minutes: " + timeDifferences[1]);
                 System.out.println("Difference in Hours: " + timeDifferences[2]);
                 scrollableText.append("Distance Travelled: " + dist + " KM\n");
+
+                // Test the in build API
+                Location locA = new Location("start");
+                locA.setLatitude(startLatitude);
+                locA.setLongitude(startLongitude);
+
+                Location locB = new Location("end");
+                locB.setLatitude(stopLatitude);
+                locB.setLongitude(stopLongitude);
+                scrollableText.append("Distance Travelled: " + locA.distanceTo(locB) + " M\n");
             }
         }
     }
