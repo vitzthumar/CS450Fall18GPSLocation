@@ -28,6 +28,8 @@ public class MainFragment extends Fragment implements Observer {
 
     private OnFragmentInteractionListener mListener;
     private TextView scrollableText = null;
+    private TextView tv_lat;
+    private TextView tv_lon;
     private LocationHandler handler = null;
     private final static int PERMISSION_REQUEST_CODE = 999;
     private Button startStopButton;
@@ -85,6 +87,8 @@ public class MainFragment extends Fragment implements Observer {
         this.scrollableText = rootView.findViewById(R.id.scrollableText);
         scrollableText.setMovementMethod(new ScrollingMovementMethod());
 
+        tv_lat = rootView.findViewById(R.id.tv_lat);
+        tv_lon = rootView.findViewById(R.id.tv_lon);
 
         View aboutButton = rootView.findViewById(R.id.about_button);
         aboutButton.setOnClickListener(new View.OnClickListener() {
@@ -115,16 +119,38 @@ public class MainFragment extends Fragment implements Observer {
                 // Check the state of the button
                 if (buttonState == 0) {
                     // button says start - so we start and rememeber the location of the individual
-                    handler.getLocation();
+                    Location l = handler.getLocation();
                     buttonState = 1;
                     startStopButton.setBackgroundColor(Color.RED);
                     startStopButton.setText("Stop");
+                    startLatitude = l.getLatitude();
+                    startLongitude = l.getLongitude();
+                    startDate = new Date();
                 } else {
                     // button says stop - so we stop and do the appropriate calculations
-                    handler.getLocation();
+                    Location l = handler.getLocation();
                     buttonState = 0;
                     startStopButton.setBackgroundColor(Color.GREEN);
                     startStopButton.setText("Start");
+                    stopLatitude = l.getLatitude();
+                    stopLongitude = l.getLongitude();
+                    long[] timeDifferences = Time.calculateTimeDifference(startDate, new Date());
+                    double dist = Haversine.distance(startLatitude, startLongitude, stopLatitude, stopLongitude);
+                    System.out.println("Difference in Seconds: " + timeDifferences[0]);
+                    System.out.println("Difference in Minutes: " + timeDifferences[1]);
+                    System.out.println("Difference in Hours: " + timeDifferences[2]);
+                    scrollableText.append("Distance Travelled: " + dist + " KM\n");
+
+                    // Test the in build API
+                    Location locA = new Location("start");
+                    locA.setLatitude(startLatitude);
+                    locA.setLongitude(startLongitude);
+
+                    Location locB = new Location("end");
+                    locB.setLatitude(stopLatitude);
+                    locB.setLongitude(stopLongitude);
+                    scrollableText.append("Distance Travelled: " + locA.distanceTo(locB) + " M\n");
+                    scrollableText.append("------------------------\n");
                 }
             }
         });
@@ -167,31 +193,8 @@ public class MainFragment extends Fragment implements Observer {
             final double lat = l.getLatitude();
             final double lon = l.getLongitude();
 
-            // Check which state the button is in
-            if (buttonState == 0) {
-                startLatitude = lat;
-                startLongitude = lon;
-                startDate = new Date();
-            } else {
-                stopLatitude = lat;
-                stopLongitude = lon;
-                long[] timeDifferences = Time.calculateTimeDifference(startDate, new Date());
-                double dist = Haversine.distance(startLatitude, startLongitude, stopLatitude, stopLongitude);
-                System.out.println("Difference in Seconds: " + timeDifferences[0]);
-                System.out.println("Difference in Minutes: " + timeDifferences[1]);
-                System.out.println("Difference in Hours: " + timeDifferences[2]);
-                scrollableText.append("Distance Travelled: " + dist + " KM\n");
-
-                // Test the in build API
-                Location locA = new Location("start");
-                locA.setLatitude(startLatitude);
-                locA.setLongitude(startLongitude);
-
-                Location locB = new Location("end");
-                locB.setLatitude(stopLatitude);
-                locB.setLongitude(stopLongitude);
-                scrollableText.append("Distance Travelled: " + locA.distanceTo(locB) + " M\n");
-            }
+            tv_lat.setText("Lat: " + Double.toString(lat));
+            tv_lon.setText("Lon: " + Double.toString(lon));
         }
     }
     /**
