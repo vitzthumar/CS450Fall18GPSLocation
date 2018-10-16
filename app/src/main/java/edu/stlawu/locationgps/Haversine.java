@@ -6,7 +6,7 @@ public class Haversine {
     public static double distance(double startLat, double startLong, double endLat, double endLong) {
 
         // TODO remove these printlns
-        System.out.println("Canlulating...");
+        System.out.println("Calculating...");
         System.out.println("startLat " + startLat);
         System.out.println("startLon " + startLong);
         System.out.println("endLat " + endLat);

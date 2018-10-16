@@ -14,9 +14,7 @@ import android.os.Bundle;
 
 import java.util.Observable;
 
-public class LocationHandler
-    extends Observable
-    implements LocationListener {
+public class LocationHandler extends Observable implements LocationListener {
 
     // handles location services for the device
     private LocationManager lm;
@@ -32,17 +30,17 @@ public class LocationHandler
                 == PackageManager.PERMISSION_GRANTED) {
             lm.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
-                    5000,
+                    2000,
                     0,
                     this);
             lm.requestLocationUpdates(
                     LocationManager.NETWORK_PROVIDER,
-                    5000,
+                    2000,
                     0,
                     this);
             lm.requestLocationUpdates(
                     LocationManager.PASSIVE_PROVIDER,
-                    5000,
+                    2000,
                     0,
                     this);
 
@@ -100,17 +98,17 @@ public class LocationHandler
                 == PackageManager.PERMISSION_GRANTED) {
             lm.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
-                    5000,
+                    2000,
                     0,
                     this);
             lm.requestLocationUpdates(
                     LocationManager.NETWORK_PROVIDER,
-                    5000,
+                    2000,
                     0,
                     this);
             lm.requestLocationUpdates(
                     LocationManager.PASSIVE_PROVIDER,
-                    5000,
+                    2000,
                     0,
                     this);
 

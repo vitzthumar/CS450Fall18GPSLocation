@@ -23,8 +23,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:minWidth="250dp"
-                android:maxWidth="250dp"
+                android:minWidth="350dp"
+                android:maxWidth="350dp"
                 android:maxLines="1"
                 android:background="@drawable/border"
                 android:text="@string/total_time"
@@ -35,27 +35,51 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:minWidth="250dp"
-                android:maxWidth="250dp"
+                android:minWidth="350dp"
+                android:maxWidth="350dp"
                 android:maxLines="1"
                 android:background="@drawable/border"
                 android:text="@string/total_distance"
                 android:textSize="18sp"/>
+
+        </LinearLayout>
+    </HorizontalScrollView>
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/averageVelocity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:minWidth="250dp"
-                android:maxWidth="250dp"
+                android:minWidth="350dp"
+                android:maxWidth="350dp"
                 android:maxLines="1"
                 android:background="@drawable/border"
                 android:text="@string/average_velocity"
                 android:textSize="18sp"/>
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/currentVelocity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:minWidth="350dp"
+                android:maxWidth="350dp"
+                android:maxLines="1"
+                android:background="@drawable/border"
+                android:text="@string/current_velocity"
+                android:textSize="18sp"/>
 
+        </LinearLayout>
     </HorizontalScrollView>
 
     <Button
@@ -67,26 +91,13 @@
         android:layout_marginTop="40dp"
         android:layout_marginBottom="40dp"
         android:text="@string/start"
-        android:id="@+id/startStopButton"/>
+        android:id="@+id/startStopButton"
+        android:elevation="50dp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#AAAAAA"
-        android:id="@+id/tv_lat"
-        />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFAAAA"
-        android:id="@+id/tv_lon"
-        />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         android:padding="5dp"
         android:background="@drawable/border"
         android:scrollbars="vertical"
@@ -94,13 +105,42 @@
         android:minHeight="250dp"
         android:id="@+id/scrollableText"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginTop="30dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border"
+            android:id="@+id/tv_lat"
+            android:layout_gravity="center"
+            android:paddingEnd="5dp"
+            android:paddingStart="5dp"
+            android:maxLines="1"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border"
+            android:id="@+id/tv_lon"
+            android:layout_gravity="center"
+            android:paddingEnd="5dp"
+            android:paddingStart="5dp"
+            android:maxLines="1"
+            />
+    </LinearLayout>
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginTop="40dp"
         android:text="@string/aboutButton"
         android:id="@+id/about_button"/>
 

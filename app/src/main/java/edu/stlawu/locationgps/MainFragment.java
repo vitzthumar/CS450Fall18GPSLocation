@@ -19,6 +19,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
@@ -35,11 +38,18 @@ public class MainFragment extends Fragment implements Observer {
     private Button startStopButton;
     private static final int EARTH_RADIUS = 6371;
     private int buttonState; // 0 means the button says "start", 1 means it says "stop"
+    private int logCount = 0;
     private double startLatitude;
     private double startLongitude;
     private double stopLatitude;
     private double stopLongitude;
+    private int[] timeTracker = new int[3];
+    private float[] distanceTracker = new float[2];
     private Date startDate;
+    private TextView elapsedTime = null;
+    private TextView totalDistance = null;
+    private TextView averageVelocity = null;
+    private TextView currentVelocity = null;
 
     public MainFragment() {
         // required empty public constructor
@@ -83,12 +93,21 @@ public class MainFragment extends Fragment implements Observer {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
+        // decimal rounding format (to 3 decimal places)
+        final DecimalFormat decimalFormat = new DecimalFormat("#.###");
+
         // make the scrollable text scrollable
         this.scrollableText = rootView.findViewById(R.id.scrollableText);
         scrollableText.setMovementMethod(new ScrollingMovementMethod());
 
         tv_lat = rootView.findViewById(R.id.tv_lat);
         tv_lon = rootView.findViewById(R.id.tv_lon);
+        // get the horizontal text views IDs
+        elapsedTime = rootView.findViewById(R.id.elapsedTime);
+        totalDistance = rootView.findViewById(R.id.totalDistance);
+        averageVelocity = rootView.findViewById(R.id.averageVelocity);
+        currentVelocity = rootView.findViewById(R.id.currentVelocity);
+
 
         View aboutButton = rootView.findViewById(R.id.about_button);
         aboutButton.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +132,10 @@ public class MainFragment extends Fragment implements Observer {
 
         // StartStop
         startStopButton = rootView.findViewById(R.id.startStopButton);
+        // set the startStop to its initial START state
+        buttonState = 0;
+        startStopButton.setBackgroundColor(Color.GREEN);
+        startStopButton.setText("Start");
         startStopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,6 +150,8 @@ public class MainFragment extends Fragment implements Observer {
                     startLongitude = l.getLongitude();
                     startDate = new Date();
                 } else {
+                    // increment the logCount
+                    logCount++;
                     // button says stop - so we stop and do the appropriate calculations
                     Location l = handler.getLocation();
                     buttonState = 0;
@@ -139,7 +164,11 @@ public class MainFragment extends Fragment implements Observer {
                     System.out.println("Difference in Seconds: " + timeDifferences[0]);
                     System.out.println("Difference in Minutes: " + timeDifferences[1]);
                     System.out.println("Difference in Hours: " + timeDifferences[2]);
-                    scrollableText.append("Distance Travelled: " + dist + " KM\n");
+
+                    // only append if over 1 kilometer was traveled
+                    if (dist >= 1) {
+                        scrollableText.append(logCount + ": Distance traveled: " + decimalFormat.format(dist) + " KM\n");
+                    }
 
                     // Test the in build API
                     Location locA = new Location("start");
@@ -149,18 +178,57 @@ public class MainFragment extends Fragment implements Observer {
                     Location locB = new Location("end");
                     locB.setLatitude(stopLatitude);
                     locB.setLongitude(stopLongitude);
-                    scrollableText.append("Distance Travelled: " + locA.distanceTo(locB) + " M\n");
+                    float distanceInMeters = locA.distanceTo(locB);
+                    // only append if under 1 kilometer was traveled
+                    if (distanceInMeters < 1000) {
+                        scrollableText.append(logCount + ": Distance traveled: " + decimalFormat.format(distanceInMeters) + " M\n");
+                    }
+                    // was it over 2 hours?
+                    if (timeDifferences[2] >= 2) {
+                        scrollableText.append("    Time spent traveling: " + timeDifferences[2] + " hours and " + timeDifferences[1] + " minutes\n");
+                    } else {
+                        // was it over 2 minutes?
+                        if (timeDifferences[1] >= 2) {
+                            scrollableText.append("    Time spent traveling: " + timeDifferences[1] + " minutes and "  + timeDifferences[0] + " seconds\n");
+                        } else {
+                            // under 2 minutes
+                            scrollableText.append("    Time spent traveling: " + timeDifferences[0] + " seconds\n");
+                        }
+                    }
                     scrollableText.append("------------------------\n");
+
+                    /* UPDATE THE HORIZONTAL SCROLLVIEW TEXT VIEWS */
+                    // add the seconds, minutes, and hours to the time tracker
+                    timeTracker[0] += timeDifferences[0];
+                    timeTracker[1] += timeDifferences[1];
+                    timeTracker[2] += timeDifferences[2];
+                    // find the remainder and modulo for min and hr
+                    timeTracker[1] += timeTracker[0] / 60;
+                    timeTracker[0] %= 60;
+                    timeTracker[2] += timeTracker[1] / 60;
+                    timeTracker[1] %= 60;
+                    // display the time
+                    String elapsedTimeText = "TOTAL TIME: " + timeTracker[2] + " HR, " + timeTracker[1] + " MIN, " + timeTracker[0] + " SEC";
+                    elapsedTime.setText(elapsedTimeText);
+
+                    // add the km and m to the distance tracker
+                    distanceTracker[0] += distanceInMeters;
+                    // find the remainder and module for the km
+                    distanceTracker[1] += distanceTracker[0] / 1000;
+                    distanceTracker[0] %= 1000;
+                    String totalDistanceText = "TOTAL DISTANCE: " + (int)distanceTracker[1] + " KM, " + decimalFormat.format(distanceTracker[0]) + " M";
+                    totalDistance.setText(totalDistanceText);
+
+                    // add the average velocity
+                    float totalTrackedSeconds = timeTracker[0] + (timeTracker[1] * 60) + (timeTracker[2] * 3600);
+                    float totalTrackedDistance = distanceTracker[0] + ((int)distanceTracker[1] * 1000);
+                    String averageVelocityText = "AVERAGE VELOCITY: " + decimalFormat.format(totalTrackedDistance / totalTrackedSeconds) + " M/SEC";
+                    averageVelocity.setText(averageVelocityText);
                 }
             }
         });
-
-
         return rootView;
     }
-
-
-
 
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -193,8 +261,12 @@ public class MainFragment extends Fragment implements Observer {
             final double lat = l.getLatitude();
             final double lon = l.getLongitude();
 
-            tv_lat.setText("Lat: " + Double.toString(lat));
-            tv_lon.setText("Lon: " + Double.toString(lon));
+            tv_lat.setText("LATITUDE: " + Double.toString(lat));
+            tv_lon.setText("LONGITUDE: " + Double.toString(lon));
+
+            Location currentLocation = handler.getLocation();
+            String currentVelocityString = "CURRENT VELOCITY: " + Float.toString(currentLocation.getSpeed()) + " M/SEC";
+            currentVelocity.setText(currentVelocityString);
         }
     }
     /**
