@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,7 @@ public class MainFragment extends Fragment implements Observer {
     private LocationHandler handler = null;
     private final static int PERMISSION_REQUEST_CODE = 999;
     private Button startStopButton;
+    private Button statsButton;
     private static final int EARTH_RADIUS = 6371;
     private int buttonState; // 0 means the button says "start", 1 means it says "stop"
     private int logCount = 0;
@@ -46,10 +48,11 @@ public class MainFragment extends Fragment implements Observer {
     private int[] timeTracker = new int[3];
     private float[] distanceTracker = new float[2];
     private Date startDate;
-    private TextView elapsedTime = null;
-    private TextView totalDistance = null;
-    private TextView averageVelocity = null;
+    private String elapsedTime = null;
+    private String totalDistance = null;
+    private String averageVelocity = null;
     private TextView currentVelocity = null;
+    private String totalStats;
 
     public MainFragment() {
         // required empty public constructor
@@ -83,6 +86,11 @@ public class MainFragment extends Fragment implements Observer {
         startLongitude = 0;
         stopLatitude = 0;
         stopLongitude = 0;
+        elapsedTime = "Total Time: 0 Hrs, 0 Mins, 0 Secs";
+        totalDistance = "Total Distance: 0 KM, 0 M";
+        averageVelocity = "Average Velocity: 0 M/Sec";
+        totalStats = "%s\n\n%s\n\n%s\n";
+        totalStats = String.format(totalStats, elapsedTime, totalDistance, averageVelocity);
     }
 
     @Override
@@ -103,10 +111,26 @@ public class MainFragment extends Fragment implements Observer {
         tv_lat = rootView.findViewById(R.id.tv_lat);
         tv_lon = rootView.findViewById(R.id.tv_lon);
         // get the horizontal text views IDs
-        elapsedTime = rootView.findViewById(R.id.elapsedTime);
-        totalDistance = rootView.findViewById(R.id.totalDistance);
-        averageVelocity = rootView.findViewById(R.id.averageVelocity);
         currentVelocity = rootView.findViewById(R.id.currentVelocity);
+
+        Button statsButton = rootView.findViewById(R.id.stats_button);
+        statsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder =
+                        new AlertDialog.Builder(getActivity());
+                builder.setMessage(totalStats);
+                builder.setPositiveButton(R.string.close,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                return;
+                            }
+                        });
+                builder.show();
+            }
+        });
 
 
         View aboutButton = rootView.findViewById(R.id.about_button);
@@ -134,7 +158,7 @@ public class MainFragment extends Fragment implements Observer {
         startStopButton = rootView.findViewById(R.id.startStopButton);
         // set the startStop to its initial START state
         buttonState = 0;
-        startStopButton.setBackgroundColor(Color.GREEN);
+        startStopButton.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.buttonStrat));
         startStopButton.setText("Start");
         startStopButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +168,7 @@ public class MainFragment extends Fragment implements Observer {
                     // button says start - so we start and rememeber the location of the individual
                     Location l = handler.getLocation();
                     buttonState = 1;
-                    startStopButton.setBackgroundColor(Color.RED);
+                    startStopButton.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.buttonStop));
                     startStopButton.setText("Stop");
                     startLatitude = l.getLatitude();
                     startLongitude = l.getLongitude();
@@ -155,7 +179,7 @@ public class MainFragment extends Fragment implements Observer {
                     // button says stop - so we stop and do the appropriate calculations
                     Location l = handler.getLocation();
                     buttonState = 0;
-                    startStopButton.setBackgroundColor(Color.GREEN);
+                    startStopButton.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.buttonStrat));
                     startStopButton.setText("Start");
                     stopLatitude = l.getLatitude();
                     stopLongitude = l.getLongitude();
@@ -208,22 +232,23 @@ public class MainFragment extends Fragment implements Observer {
                     timeTracker[2] += timeTracker[1] / 60;
                     timeTracker[1] %= 60;
                     // display the time
-                    String elapsedTimeText = "TOTAL TIME: " + timeTracker[2] + " HR, " + timeTracker[1] + " MIN, " + timeTracker[0] + " SEC";
-                    elapsedTime.setText(elapsedTimeText);
+                    elapsedTime = "Total Time: " + timeTracker[2] + " Hrs, " + timeTracker[1] + " Mins, " + timeTracker[0] + " Secs";
+
 
                     // add the km and m to the distance tracker
                     distanceTracker[0] += distanceInMeters;
                     // find the remainder and module for the km
                     distanceTracker[1] += distanceTracker[0] / 1000;
                     distanceTracker[0] %= 1000;
-                    String totalDistanceText = "TOTAL DISTANCE: " + (int)distanceTracker[1] + " KM, " + decimalFormat.format(distanceTracker[0]) + " M";
-                    totalDistance.setText(totalDistanceText);
+                    totalDistance = "Total Distance: " + (int)distanceTracker[1] + " KM, " + decimalFormat.format(distanceTracker[0]) + " M";
+
 
                     // add the average velocity
                     float totalTrackedSeconds = timeTracker[0] + (timeTracker[1] * 60) + (timeTracker[2] * 3600);
                     float totalTrackedDistance = distanceTracker[0] + ((int)distanceTracker[1] * 1000);
-                    String averageVelocityText = "AVERAGE VELOCITY: " + decimalFormat.format(totalTrackedDistance / totalTrackedSeconds) + " M/SEC";
-                    averageVelocity.setText(averageVelocityText);
+                    averageVelocity = "Average Velocity: " + decimalFormat.format(totalTrackedDistance / totalTrackedSeconds) + " M/Sec";
+                    totalStats = "%s\n\n%s\n\n%s\n";
+                    totalStats = String.format(totalStats, elapsedTime, totalDistance, averageVelocity);
                 }
             }
         });
@@ -261,11 +286,11 @@ public class MainFragment extends Fragment implements Observer {
             final double lat = l.getLatitude();
             final double lon = l.getLongitude();
 
-            tv_lat.setText("LATITUDE: " + Double.toString(lat));
-            tv_lon.setText("LONGITUDE: " + Double.toString(lon));
+            tv_lat.setText("Latitude: " + Double.toString(lat));
+            tv_lon.setText("Longitude: " + Double.toString(lon));
 
             Location currentLocation = handler.getLocation();
-            String currentVelocityString = "CURRENT VELOCITY: " + Float.toString(currentLocation.getSpeed()) + " M/SEC";
+            String currentVelocityString = "Current Velocity: " + Float.toString(currentLocation.getSpeed()) + " M/Sec";
             currentVelocity.setText(currentVelocityString);
         }
     }

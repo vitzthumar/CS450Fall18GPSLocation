@@ -1,11 +1,8 @@
 <resources>
     <string name="app_name">LocationGPS</string>
-    <string name="total_distance">TOTAL DISTANCE: 0 KM, 0 M </string>
-    <string name="average_velocity">AVERAGE VELOCITY: 0 M/SEC</string>
-    <string name="total_time">TOTAL TIME: 0 HR, 0 MIN, 0 SEC </string>
-    <string name="current_velocity">CURRENT VELOCITY: </string>
+    <string name="current_velocity">Current Velocity: </string>
     <string name="start">START</string>
-    <string name="aboutButton">ABOUT THIS APP</string>
+    <string name="aboutButton">About</string>
     <string name="about_title_text">About This GPS Tracker</string>
     <string name="about">
         Press START to begin recording your
@@ -18,5 +15,6 @@
         Developed by August Vitzthum and Nevaan Perera
     </string>
     <string name="close">CLOSE</string>
+    <string name="statsButton">Stats</string>
 
 </resources>
