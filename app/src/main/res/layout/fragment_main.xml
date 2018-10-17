@@ -18,7 +18,8 @@
         android:text="@string/current_velocity"
         android:textAlignment="center"
         android:textColor="@android:color/background_light"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_marginBottom="40dp"/>
 
     <TextView
         android:id="@+id/scrollableText"
@@ -77,6 +78,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="40dp"
             android:elevation="50dp"
+            android:layout_weight="1"
             android:text="@string/start" />
 
         <Button
@@ -87,7 +89,8 @@
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
             android:text="@string/statsButton"
-            android:background="@color/colorFifth"/>
+            android:layout_weight="1"
+            android:background="@color/colorForth"/>
 
         <Button
             android:id="@+id/about_button"
@@ -97,7 +100,8 @@
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
             android:text="@string/aboutButton"
-            android:background="@color/colorForth"/>
+            android:layout_weight="1"
+            android:background="@color/colorFifth"/>
 
     </LinearLayout>
 

@@ -2,7 +2,7 @@
     <string name="app_name">LocationGPS</string>
     <string name="current_velocity">Current Velocity: </string>
     <string name="start">START</string>
-    <string name="aboutButton">About</string>
+    <string name="aboutButton">ABOUT</string>
     <string name="about_title_text">About This GPS Tracker</string>
     <string name="about">
         Press START to begin recording your
@@ -15,6 +15,6 @@
         Developed by August Vitzthum and Nevaan Perera
     </string>
     <string name="close">CLOSE</string>
-    <string name="statsButton">Stats</string>
+    <string name="statsButton">STATS</string>
 
 </resources>
